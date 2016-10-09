@@ -1,6 +1,7 @@
 # Create first network with Keras
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.optimizers import SGD
 import numpy
 import pandas as pd
 import numpy as np
@@ -41,11 +42,15 @@ Y = dataset[:,10]
 print(Y)
 # create model
 model = Sequential()
-model.add(Dense(20, input_dim=10, init='uniform', activation='relu'))
-model.add(Dense(10, init='uniform', activation='relu'))
-model.add(Dense(1, init='uniform', activation='sigmoid'))
+model.add(Dense(30, input_dim=10, init='normal', activation='relu'))
+model.add(Dense(10, init='normal', activation='relu'))
+model.add(Dense(1, init='normal', activation='sigmoid'))
 # Compile model
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+#model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+model.compile(loss='mean_squared_error', optimizer=sgd, metrics=['accuracy'])
+
 # Fit the model
 model.fit(X, Y, nb_epoch=150, batch_size=10)
 # evaluate the model
