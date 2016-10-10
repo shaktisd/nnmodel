@@ -38,13 +38,21 @@ numpy.random.seed(seed)
 
 # split into input (X) and output (Y) variables
 X = dataset[:,0:10]
+X = X.reshape(8247,1,10)
+print(X.shape)
 Y = dataset[:,10]
+print(Y.shape)
 print(Y)
 # create model
 model = Sequential()
-model.add(Dense(30, input_dim=10, init='normal', activation='relu'))
-model.add(Dense(10, init='normal', activation='relu'))
-model.add(Dense(1, init='normal', activation='sigmoid'))
+#model.add(Dense(30, input_dim=10, init='normal', activation='relu'))
+#model.add(Dense(10, init='normal', activation='relu'))
+#model.add(Dense(1, init='normal', activation='sigmoid'))
+model = Sequential()
+model.add(LSTM(10,
+               batch_input_shape=(1, 1, 10), return_sequences=False,
+               stateful=True))
+model.add(Dense(1, activation='sigmoid'))
 # Compile model
 
 #model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -52,7 +60,7 @@ sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='mean_squared_error', optimizer=sgd, metrics=['accuracy'])
 
 # Fit the model
-model.fit(X, Y, nb_epoch=150, batch_size=10)
+model.fit(X, Y, nb_epoch=150, batch_size=1)
 # evaluate the model
 scores = model.evaluate(X, Y)
 print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
