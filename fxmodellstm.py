@@ -7,7 +7,7 @@ import numpy
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('TRAIN.csv', header = None)
+df = pd.read_csv('IOC_TRAIN.csv', header = None)
 #Calculate returns 1 , 0 , -1
 #df['BSEC'] = np.where(df['BSEC'].shift(-1) - df['BSEC'] > 0, 1 , -1)
 
@@ -38,11 +38,11 @@ seed = 7
 numpy.random.seed(seed)
 
 # split into input (X) and output (Y) variables
-X = dataset[:,0:6]
+X = dataset[:,0:2]
 print(X.shape)
-X = X.reshape(14999,1,6)
+X = X.reshape(4601,1,2)
 print(X.shape)
-Y = dataset[:,6]
+Y = dataset[:,2]
 print(Y.shape)
 print(Y)
 # create model
@@ -51,8 +51,8 @@ model = Sequential()
 #model.add(Dense(10, init='normal', activation='relu'))
 #model.add(Dense(1, init='normal', activation='sigmoid'))
 model = Sequential()
-model.add(LSTM(10,
-               batch_input_shape=(1, 1, 6), return_sequences=False,
+model.add(LSTM(20,
+               batch_input_shape=(1, 1, 2), return_sequences=False,
                stateful=True))
 model.add(Dense(1, activation='sigmoid'))
 # Compile model
